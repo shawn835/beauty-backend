@@ -1,6 +1,6 @@
 // Middleware to handle CORS
 export const handleCORS = (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from anywhere
   res.setHeader(
     "Access-Control-Allow-Methods",
     "POST, GET, PUT, DELETE, OPTIONS"
@@ -11,11 +11,15 @@ export const handleCORS = (req, res) => {
 // Middleware to handle preflight (OPTIONS) requests
 export const handlePreflight = (req, res) => {
   if (req.method === "OPTIONS") {
-    res.writeHead(204);
+    res.writeHead(204, {
+      "Access-Control-Allow-Origin": "*", // Allow all origins
+      "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
     res.end();
-    return true; // carry on with the actual request
+    return true; // Stop further processing
   }
-  return false; // Indicates that the request was not handled
+  return false; // Continue with the actual request
 };
 
 // Middleware to parse request body
