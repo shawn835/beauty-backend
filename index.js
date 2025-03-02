@@ -11,6 +11,10 @@ import { cleanUpTempFolder } from "./Bookings/CleanUpTemp.js";
 import { downloadBookings } from "./Bookings/downloadBooking.js";
 import { handleBookingReschedule } from "./Bookings/handleReschedule.js";
 import { handleCancelBooking } from "./Bookings/handleCancelBooking.js";
+import { adminAuth } from "./Bookings/renderBookingDetails.js";
+import { renderBookings } from "./Bookings/renderBookingDetails.js";
+import { convertFiles } from "./Bookings/fileUpload.js";
+import { sendTelegramMessage } from "./Bookings/Telegram.js";
 const deleteInterval = Number(process.env.DELETE_AFTER);
 
 setInterval(cleanUpTempFolder, deleteInterval);
@@ -25,10 +29,15 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST") {
+    await sendTelegramMessage("New booking received!");
     if (req.url === "/online-bookings") {
       await handleBookingsPosts(req, res);
     } else if (req.url === "/contact-us") {
       await handleContactUsPost(req, res);
+    } else if (req.url === "/admin/login") {
+      await adminAuth(req, res);
+    } else if (req.url === "/upload") {
+      await convertFiles(req, res);
     } else {
       handleRouteNotFound(req, res);
     }
@@ -37,6 +46,8 @@ const server = http.createServer(async (req, res) => {
       await retrieveBookingDetails(req, res);
     } else if (req.url.startsWith("/download-booking")) {
       await downloadBookings(req, res);
+    } else if (req.url === "/admin/bookings") {
+      renderBookings(req, res);
     } else {
       handleRouteNotFound(req, res);
     }

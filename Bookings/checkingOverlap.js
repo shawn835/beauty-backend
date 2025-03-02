@@ -1,4 +1,3 @@
-// src/utils/checkBookingOverlap.js
 import { readBookings } from "./bookingsFormHandler.js";
 
 export const parseDateTime = (date, time) => {
@@ -42,13 +41,14 @@ export const checkBookingOverlap = async (
     const startTime = parseDateTime(date, time);
     const endTime = new Date(startTime.getTime() + serviceDuration * 60000);
 
+    // Ensure booking is within operating hours (6:00 AM - 8:30 PM)
     if (
       startTime.getHours() < 6 ||
       startTime.getHours() > 20 ||
       (startTime.getHours() === 20 && startTime.getMinutes() > 30) ||
       endTime.getHours() >= 21
     ) {
-      throw new Error("services are offered from 6:00 AM to 8:30 PM");
+      return "Services are offered from 6:00 AM to 8:30 PM"; // ✅ Return a message instead of throwing an error
     }
 
     // Read existing bookings
@@ -57,7 +57,7 @@ export const checkBookingOverlap = async (
     // Check for overlaps
     const hasOverlap = existingBookings.some((booking) => {
       if (booking.date !== date || booking.technician !== technician) {
-        return false; // check bookings for the same day and same technician
+        return false; // Only check bookings for the same day and same technician
       }
 
       const existingStartTime = parseDateTime(booking.date, booking.time);
@@ -73,8 +73,9 @@ export const checkBookingOverlap = async (
       );
     });
 
-    return hasOverlap;
+    return hasOverlap || false; // ✅ Return true if overlap, false if available
   } catch (error) {
-    throw new Error(error.message || "Failed to check booking overlaps");
+    console.error("Error in checkBookingOverlap:", error.message);
+    throw new Error("Failed to check booking overlaps");
   }
 };

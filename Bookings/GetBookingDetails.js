@@ -2,10 +2,8 @@ import { readBookings } from "./bookingsFormHandler.js";
 
 export const retrieveBookingDetails = async (req, res) => {
   if (req.method !== "GET") return;
-  // !req.url.startsWith("/booking-details"
   const urlParams = new URL(req.url, `http://${req.headers.host}`);
   const bookingId = urlParams.searchParams.get("id");
-  console.log(bookingId);
 
   if (!bookingId) {
     res.writeHead(400, { "Content-Type": "application/json" });
@@ -16,9 +14,7 @@ export const retrieveBookingDetails = async (req, res) => {
   try {
     const bookings = await readBookings();
 
-    const booking = bookings.find(
-      (b) => b.id.toLowerCase() === bookingId.toLowerCase()
-    );
+    const booking = bookings.find((b) => b.id === bookingId);
 
     if (booking) {
       res.writeHead(200, { "Content-Type": "application/json" });

@@ -1,64 +1,74 @@
 [
   {
-    "id": "C88EAV",
-    "name": "Illo enim est quasi",
-    "phone": "0798676543",
-    "email": "hiwaqi@mailinator.com",
-    "date": "2025-02-26",
-    "time": "20:20",
+    "id": "KZWBVX",
+    "phone": "0789000987",
+    "date": "2025-03-06",
+    "time": "12:36",
     "services": [
-      "manicure"
+      "pedicure"
     ],
-    "technician": "olivia baker",
-    "duration": 120,
-    "imagePaths": [
-      "/BookingSamplesImages/Illo_enim_est_quasi-1740575632226-9ztv6a.jpg",
-      "/BookingSamplesImages/Illo_enim_est_quasi-1740575632244-8uhdq3.jpg"
-    ],
-    "rescheduleCount": 2
+    "technician": "leila kien",
+    "duration": 100,
+    "imagePaths": [],
+    "rescheduleCount": 1
   },
   {
-    "id": "TJV0KR",
-    "name": "Voluptas aut enim do",
-    "phone": "0789887765",
-    "email": "fuwe@mailinator.com",
-    "date": "2025-02-27",
-    "time": "17:13",
+    "id": "1O86MW",
+    "phone": "0789000987",
+    "date": "2025-03-01",
+    "time": "12:36",
     "services": [
-      "facial"
+      "pedicure"
     ],
-    "technician": "olivia baker",
+    "technician": "sammy njoroge",
+    "duration": 100,
+    "imagePaths": [
+      "/gallery/manicure-image-1.jpg",
+      "/gallery/enhancement-image-2.jpg",
+      "/uploads/art-image-5.jpg",
+      "/uploads/art-image-7.jpg",
+      "/uploads/art-image-8.jpg"
+    ]
+  },
+  {
+    "id": "L0DSJZ",
+    "phone": "0789000998",
+    "date": "2025-03-01",
+    "time": "09:50",
+    "services": [
+      "nail art"
+    ],
+    "technician": "leila kien",
+    "duration": 60,
+    "imagePaths": []
+  },
+  {
+    "id": "E65VFV",
+    "name": "Aspernatur",
+    "phone": "0789000987",
+    "date": "2025-03-01",
+    "time": "17:56",
+    "services": [
+      "nail art",
+      "ear piercing"
+    ],
+    "technician": "simon chege",
     "duration": 70,
     "imagePaths": []
   },
   {
-    "id": "QV70LU",
-    "name": "Eum molestias nihil",
-    "phone": "0789098765",
-    "email": "comyc@mailinator.com",
-    "date": "2025-03-07",
-    "time": "16:47",
+    "id": "15GCZN",
+    "name": "Unde dicta",
+    "phone": "0789000987",
+    "date": "2025-03-02",
+    "time": "14:29",
     "services": [
+      "pedicure",
+      "facial",
       "ear piercing"
     ],
     "technician": "olivia baker",
-    "duration": 0,
-    "imagePaths": [],
-    "rescheduleCount": 2
-  },
-  {
-    "id": "VB20JK",
-    "name": "SARAH WAMBUI NDABARU",
-    "phone": "0724733703",
-    "email": "SARAH@GMAIL.COM",
-    "date": "2025-02-28",
-    "time": "11:57",
-    "services": [
-      "facial"
-    ],
-    "technician": "olivia baker",
-    "duration": 70,
-    "imagePaths": [],
-    "rescheduleCount": 1
+    "duration": 180,
+    "imagePaths": []
   }
 ]

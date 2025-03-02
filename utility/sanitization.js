@@ -13,11 +13,6 @@ export const sanitizeInput = (input) => {
     .replace(/'/g, "&#39;"); // Prevent injection attacks but keep double quotes
 };
 
-// Email Validation
-export const isValidEmail = (email) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
-
 export const validatePhoneNumber = (phone) => {
   //remove spaces
   const cleanedPhone = phone.replace(/\s+/g, "");

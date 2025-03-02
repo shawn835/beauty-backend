@@ -10,7 +10,7 @@ export const rescheduleOverlap = async (
   time,
   serviceDuration,
   technician,
-  bookingIdToIgnore // New parameter to exclude the rescheduled booking
+  bookingIdToIgnore
 ) => {
   try {
     const startTime = parseDateTime(date, time);

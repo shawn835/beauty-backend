@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Resolve the path to formData.json
-const filePath = path.resolve(__dirname, "formData.json");
+const filePath = path.resolve(__dirname, process.env.FORM_DATA_PATH);
 
 export const handleContactUsPost = async (req, res) => {
   try {
