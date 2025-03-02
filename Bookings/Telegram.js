@@ -1,6 +1,6 @@
 import "dotenv/config";
-const BOT_TOKEN = "7819866889:AAFAB75mk7eIPLVXt2R4Sl4J4hTq0yQjfVY";
-const CHAT_ID = "6286091721";
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const CHAT_ID = process.env.CHAT_ID;
 
 export const sendTelegramMessage = async (text) => {
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
