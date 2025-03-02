@@ -7,7 +7,6 @@ import { handleMethodNotAllowed } from "./utility/HandleMethodNotAllowed.js";
 import { handleBookingsPosts } from "./Bookings/HandleBookingPosts.js";
 import { handleContactUsPost } from "./ContactForm/HandleContactUSPost.js";
 import { retrieveBookingDetails } from "./Bookings/GetBookingDetails.js";
-import { cleanUpTempFolder } from "./Bookings/CleanUpTemp.js";
 import { downloadBookings } from "./Bookings/downloadBooking.js";
 import { handleBookingReschedule } from "./Bookings/handleReschedule.js";
 import { handleCancelBooking } from "./Bookings/handleCancelBooking.js";
@@ -15,10 +14,6 @@ import { adminAuth } from "./Bookings/renderBookingDetails.js";
 import { renderBookings } from "./Bookings/renderBookingDetails.js";
 import { convertFiles } from "./Bookings/fileUpload.js";
 import { sendTelegramMessage } from "./Bookings/Telegram.js";
-const deleteInterval = Number(process.env.DELETE_AFTER);
-
-setInterval(cleanUpTempFolder, deleteInterval);
-cleanUpTempFolder();
 
 // Main server logic
 const server = http.createServer(async (req, res) => {
