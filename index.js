@@ -24,7 +24,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST") {
-    await sendTelegramMessage("New booking received!");
+    // await sendTelegramMessage("New booking received!");
     if (req.url === "/online-bookings") {
       await handleBookingsPosts(req, res);
     } else if (req.url === "/contact-us") {

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "RQ4WDD",
+    "name": "Distinctio",
+    "phone": "0789000987",
+    "date": "2025-03-02",
+    "time": "11:33",
+    "services": [
+      "ear piercing",
+      "nail enhancement"
+    ],
+    "technician": "sammy njoroge",
+    "duration": 50,
+    "imagePaths": [
+      "/gallery/manicure-image-1.jpg",
+      "/gallery/enhancement-image-2.jpg"
+    ]
+  }
+]
