@@ -13,6 +13,7 @@ import { handleCancelBooking } from "./Bookings/handleCancelBooking.js";
 import { adminAuth } from "./Bookings/renderBookingDetails.js";
 import { renderBookings } from "./Bookings/renderBookingDetails.js";
 import { convertFiles } from "./Bookings/fileUpload.js";
+import { serveStaticFiles } from "./Bookings/staticFiles.js";
 import { sendTelegramMessage } from "./Bookings/Telegram.js";
 
 // Main server logic
@@ -43,6 +44,8 @@ const server = http.createServer(async (req, res) => {
       await downloadBookings(req, res);
     } else if (req.url === "/admin/bookings") {
       renderBookings(req, res);
+    } else if (req.url.startsWith("/BookingSamplesImages/")) {
+      await serveStaticFiles(req, res);
     } else {
       handleRouteNotFound(req, res);
     }

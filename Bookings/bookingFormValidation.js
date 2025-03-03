@@ -46,7 +46,8 @@ export const validateAndSanitizeRescheduleData = (fields) => {
   // Validate services
   sanitizedFields.services.forEach((service) => {
     if (!validServices.has(service.toLowerCase())) {
-      throw new Error(`Invalid service selected. Select from valid services.`);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Internal server error" }));
     }
   });
 

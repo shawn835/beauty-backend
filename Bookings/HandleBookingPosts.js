@@ -35,7 +35,7 @@ export const handleBookingsPosts = async (req, res) => {
           error:
             hasOverlap === true
               ? `Pick another time or technician, ${sanitizedData.technician} is booked at this time`
-              : hasOverlap, // This handles the time restriction message
+              : hasOverlap, // the time restriction message
         })
       );
     }
@@ -60,7 +60,7 @@ export const handleBookingsPosts = async (req, res) => {
       JSON.stringify({ success: "Booking received!", booking: newBooking })
     );
   } catch (error) {
-    console.error("❌ Error handling booking:", error.message);
+    console.error("Error handling booking:", error.message);
     res.writeHead(500, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Internal server error" }));
   }

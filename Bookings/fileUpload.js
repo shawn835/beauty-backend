@@ -51,11 +51,10 @@ export const convertFiles = async (req, res) => {
     }
 
     //validate number
-
     const newPath = path.join(uploadDir, uploadedFile.originalFilename);
     await fs.rename(uploadedFile.filepath, newPath);
 
-    const fileUrl = `/uploads/${uploadedFile.originalFilename}`;
+    const fileUrl = `/BookingSamplesImages/${uploadedFile.originalFilename}`;
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ url: fileUrl }));
   });
