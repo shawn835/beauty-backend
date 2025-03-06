@@ -1,7 +1,10 @@
 import http from "http";
 const PORT = process.env.PORT;
+import path from "path";
+import { fileURLToPath } from "url";
 import { handleCORS } from "./utility/MiddleWare.js";
 import { handlePreflight } from "./utility/MiddleWare.js";
+import { uptimeReboot } from "./utility/MiddleWare.js";
 import { handleRouteNotFound } from "./utility/HandleRouteNotFound.js";
 import { handleMethodNotAllowed } from "./utility/HandleMethodNotAllowed.js";
 import { handleBookingsPosts } from "./Bookings/HandleBookingPosts.js";
@@ -13,8 +16,28 @@ import { handleCancelBooking } from "./Bookings/handleCancelBooking.js";
 import { adminAuth } from "./Bookings/renderBookingDetails.js";
 import { renderBookings } from "./Bookings/renderBookingDetails.js";
 import { convertFiles } from "./Bookings/fileUpload.js";
-import { serveStaticFiles } from "./Bookings/staticFiles.js";
+import { serveStaticFiles } from "./staticFiles.js";
 import { sendTelegramMessage } from "./Bookings/Telegram.js";
+import { fetchBlogs } from "./Blogs/BlogFetch.js";
+import { getBlogBySlug } from "./Blogs/GetBlogBySlug.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.resolve(
+  __dirname,
+  "Bookings",
+  process.env.SAMPLE_IMAGES_PATH
+);
+const postsImagesDir = path.resolve(
+  __dirname,
+  "Blogs",
+  process.env.POSTS_IMAGES_PATH
+);
+const displayImagesDir = path.resolve(
+  __dirname,
+  "Blogs",
+  process.env.DISPLAY_IMAGES_PATH
+);
 
 // Main server logic
 const server = http.createServer(async (req, res) => {
@@ -25,7 +48,6 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === "POST") {
-    // await sendTelegramMessage("New booking received!");
     if (req.url === "/online-bookings") {
       await handleBookingsPosts(req, res);
     } else if (req.url === "/contact-us") {
@@ -40,22 +62,36 @@ const server = http.createServer(async (req, res) => {
   } else if (req.method === "GET") {
     if (req.url.startsWith("/booking-details")) {
       await retrieveBookingDetails(req, res);
+    } else if (req.url.startsWith("/ping")) {
+      uptimeReboot(req, res);
     } else if (req.url.startsWith("/download-booking")) {
       await downloadBookings(req, res);
     } else if (req.url === "/admin/bookings") {
       renderBookings(req, res);
-    } else if (req.url.startsWith("/BookingSamplesImages/")) {
-      await serveStaticFiles(req, res);
+    } else if (req.url.startsWith("/BookingSamplesImages")) {
+      await serveStaticFiles(req, res, uploadDir);
+    } else if (req.url.startsWith("/postsImages")) {
+      await serveStaticFiles(req, res, postsImagesDir);
+    } else if (req.url.startsWith("/displayImage")) {
+      await serveStaticFiles(req, res, displayImagesDir);
+    } else if (req.url === "/blogs") {
+      await fetchBlogs(req, res);
+    } else if (req.url.startsWith("/blogPost")) {
+      await getBlogBySlug(req, res);
     } else {
       handleRouteNotFound(req, res);
     }
   } else if (req.method === "PUT") {
     if (req.url.startsWith("/reschedule-booking")) {
       await handleBookingReschedule(req, res);
+    } else {
+      handleMethodNotAllowed(req, res);
     }
   } else if (req.method === "DELETE") {
     if (req.url.startsWith("/cancel-booking")) {
       await handleCancelBooking(req, res);
+    } else {
+      handleMethodNotAllowed(req, res);
     }
   } else {
     handleMethodNotAllowed(req, res);

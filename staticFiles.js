@@ -1,21 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadDir = path.resolve(__dirname, process.env.SAMPLE_IMAGES_PATH);
-
-export const serveStaticFiles = async (req, res) => {
+export const serveStaticFiles = async (req, res, folderPath) => {
   try {
-    const filePath = path.join(
-      uploadDir,
-      req.url.replace("/BookingSamplesImages/", "")
-    );
+    const fileName = req.url.split("/").pop();
 
-    const data = await fs.readFile(filePath); // ✅ Await readFile
+    const filePath = path.join(folderPath, fileName);
 
-    // Handling MIME type
+    const data = await fs.readFile(filePath);
+
     const ext = path.extname(filePath).toLowerCase();
     const contentType =
       ext === ".png"

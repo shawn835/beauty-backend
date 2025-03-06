@@ -36,3 +36,9 @@ export const parseRequestBody = (req) => {
     });
   });
 };
+
+//uptime reboot
+export const uptimeReboot = (req, res) => {
+  res.writeHead(200, { "Content-Type": "application/json" });
+  return res.end(JSON.stringify({ status: "ok" }));
+};

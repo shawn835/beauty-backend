@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "title": "How to Maintain a Perfect Manicure",
+    "slug": "maintaining-perfect-manicure",
+    "imageDisplay": "/displayImages/art-image-9.jpg",
+    "category": "nails",
+    "subCategory": "manicure",
+    "author": "Jane Doe",
+    "publishedDate": "2023-10-01",
+    "updatedDate": "2023-10-05",
+    "tags": ["nail care", "manicure", "beauty tips"],
+    "excerpt": "Discover easy tips to keep your manicure looking fresh and stylish for weeks.",
+    "post": [
+      {
+        "description": "Start by keeping your nails hydrated using cuticle oil...",
+        "images": [
+          "/postsImages/manicure-i.jpg",
+          "/postsImages/manicure-image-4.jpg"
+        ]
+      },
+      {
+        "description": "Avoid using your nails as tools to prevent chipping...",
+        "images": [""]
+      }
+    ],
+    "meta": {
+      "title": "How to Maintain a Perfect Manicure - Beauty Blog",
+      "description": "Learn the best tips and tricks to make your manicure last longer and look stunning.",
+      "keywords": ["nail care", "manicure tips", "long-lasting nails"],
+      "ogImage": "url-to-main-image"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Blow-Drying Like a Pro: Salon-Quality Hair at Home",
+    "slug": "blowdry-like-a-pro",
+    "imageDisplay": "/displayImages/facial-image-6.jpg",
+    "category": "hair",
+    "subCategory": "blowdry",
+    "author": "John Smith",
+    "publishedDate": "2023-10-02",
+    "updatedDate": "2023-10-06",
+    "tags": ["hair care", "blowdry tips", "salon styling"],
+    "excerpt": "Get a flawless blowdry at home with these expert-approved techniques.",
+    "post": [
+      {
+        "description": "Start with a heat protectant to avoid damage...",
+        "images": [
+          "/postsImages/facial-image-5.jpg",
+          "/postsImages/facial-image-7.jpeg"
+        ]
+      },
+      {
+        "description": "Use a round brush to add volume and shape...",
+        "images": ["url3", "url4"]
+      }
+    ],
+    "meta": {
+      "title": "Blow-Drying Like a Pro - Salon Tips for Home Styling",
+      "description": "Master the art of blow-drying with these easy tips for salon-quality results at home.",
+      "keywords": ["hair styling", "blowdry techniques", "salon at home"],
+      "ogImage": "url-to-main-image"
+    }
+  }
+]

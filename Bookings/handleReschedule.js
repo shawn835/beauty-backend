@@ -63,21 +63,6 @@ export const handleBookingReschedule = async (req, res) => {
       );
     }
 
-    // Rule 2: Reschedule time must be within business hours (6:00 AM - 8:30 PM)
-    if (
-      newStartTime.getHours() < 6 ||
-      (newStartTime.getHours() === 20 && newStartTime.getMinutes() > 30) ||
-      newStartTime.getHours() >= 21
-    ) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      return res.end(
-        JSON.stringify({
-          error:
-            "Rescheduling must be within business hours (6:00 AM - 8:30 PM).",
-        })
-      );
-    }
-
     // Rule 3: Cannot reschedule more than twice within a week
     if (rescheduleCount >= 2) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -89,7 +74,7 @@ export const handleBookingReschedule = async (req, res) => {
     }
 
     // Rule 4: Reschedule must be within 14 days
-    const maxAllowedDate = new Date();
+    const maxAllowedDate = new Date(oldDate);
     maxAllowedDate.setDate(maxAllowedDate.getDate() + 14);
     if (newStartTime > maxAllowedDate) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -139,3 +124,18 @@ export const handleBookingReschedule = async (req, res) => {
     res.end(JSON.stringify({ error: error.message }));
   }
 };
+
+// Rule 2: Reschedule time must be within business hours (6:00 AM - 8:30 PM)
+// if (
+//   newStartTime.getHours() < 6 ||
+//   (newStartTime.getHours() === 20 && newStartTime.getMinutes() > 30) ||
+//   newStartTime.getHours() >= 21
+// ) {
+//   res.writeHead(400, { "Content-Type": "application/json" });
+//   return res.end(
+//     JSON.stringify({
+//       error:
+//         "Rescheduling must be within business hours (6:00 AM - 8:30 PM).",
+//     })
+//   );
+// }
