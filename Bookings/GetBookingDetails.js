@@ -1,5 +1,4 @@
-import { readBookings } from "./bookingsFormHandler.js";
-
+import { getCollection } from "../utility/readDB.js";
 export const retrieveBookingDetails = async (req, res) => {
   if (req.method !== "GET") return;
   const urlParams = new URL(req.url, `http://${req.headers.host}`);
@@ -12,9 +11,9 @@ export const retrieveBookingDetails = async (req, res) => {
   }
 
   try {
-    const bookings = await readBookings();
+    const bookingsCollection = await getCollection("bookings");
 
-    const booking = bookings.find((b) => b.id === bookingId);
+    const booking = await bookingsCollection.findOne({ id: bookingId });
 
     if (booking) {
       res.writeHead(200, { "Content-Type": "application/json" });

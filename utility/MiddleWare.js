@@ -1,3 +1,6 @@
+import exp from "constants";
+import { start } from "repl";
+
 // Middleware to handle CORS
 export const handleCORS = (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from anywhere
@@ -41,4 +44,9 @@ export const parseRequestBody = (req) => {
 export const uptimeReboot = (req, res) => {
   res.writeHead(200, { "Content-Type": "application/json" });
   return res.end(JSON.stringify({ status: "ok" }));
+};
+
+//within hours check
+export const isWithinBusinessHours = (startTime) => {
+  return startTime.getHours() >= 6 && startTime.getHours() < 21;
 };

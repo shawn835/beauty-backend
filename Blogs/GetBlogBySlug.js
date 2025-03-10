@@ -9,10 +9,8 @@ export const getBlogBySlug = async (req, res) => {
   const slug = req.url.split("/").pop();
   try {
     const blogsData = await readJson(filePath);
-    console.log(blogsData);
 
     const blog = blogsData.find((b) => b.slug === slug);
-    console.log(slug);
 
     if (blog) {
       res.writeHead(200, { "Content-Type": "application/json" });

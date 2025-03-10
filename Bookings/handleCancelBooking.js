@@ -1,15 +1,12 @@
+import { getCollection } from "../utility/readDB.js";
 import fs from "fs/promises";
 import path from "path";
-import { readBookings } from "./bookingsFormHandler.js";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const bookingsFilePath = path.resolve(
-  __dirname,
-  process.env.BOOKINGS_DATA_PATH
-);
+const sampleImages = path.resolve(__dirname, process.env.SAMPLE_IMAGES_PATH);
 
 export const handleCancelBooking = async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -20,20 +17,28 @@ export const handleCancelBooking = async (req, res) => {
       throw new Error("Booking code is required for cancellation");
     }
 
-    const bookingsData = await readBookings();
-    const existingIndex = bookingsData.findIndex(
-      (booking) => booking.id === bookingId
-    );
+    const bookingsCollection = await getCollection("bookings");
+    const existingBooking = await bookingsCollection.findOne({ id: bookingId });
 
-    if (existingIndex === -1) {
+    if (!existingBooking) {
       throw new Error("No booking found with the provided code");
     }
 
-    // Remove booking
-    bookingsData.splice(existingIndex, 1);
+    //delete associated image if any
+    if (existingBooking.imagePaths && existingBooking.imagePaths.length > 0) {
+      for (const imagePath of existingBooking.imagePaths) {
+        const absolutePath = path.join(sampleImages, imagePath);
 
-    // Write the updated data back to file
-    await fs.writeFile(bookingsFilePath, JSON.stringify(bookingsData, null, 2));
+        try {
+          await fs.unlink(absolutePath);
+        } catch (error) {
+          console.warn(`filed to delete image: ${absolutePath}`, error);
+        }
+      }
+    }
+
+    // Remove booking
+    await bookingsCollection.deleteOne({ id: bookingId });
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Booking canceled successfully" }));

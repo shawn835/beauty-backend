@@ -1,4 +1,5 @@
-import { readBookings } from "./bookingsFormHandler.js";
+import { getCollection } from "../utility/readDB.js";
+import { isWithinBusinessHours } from "../utility/MiddleWare.js";
 
 export const parseDateTime = (date, time) => {
   // Ensure date is in YYYY-MM-DD format
@@ -41,25 +42,23 @@ export const checkBookingOverlap = async (
     const startTime = parseDateTime(date, time);
     const endTime = new Date(startTime.getTime() + serviceDuration * 60000);
 
-    // Ensure booking is within operating hours (6:00 AM - 8:30 PM)
-    if (
-      startTime.getHours() < 6 ||
-      startTime.getHours() > 20 ||
-      (startTime.getHours() === 20 && startTime.getMinutes() > 30) ||
-      endTime.getHours() >= 21
-    ) {
-      return "Services are offered from 6:00 AM to 8:30 PM"; // ✅ Return a message instead of throwing an error
+    if (!isWithinBusinessHours(startTime)) {
+      return "Services are offered from 6:00 AM to 9:00 PM";
     }
 
-    // Read existing bookings
-    const existingBookings = await readBookings();
+    // ✅ Fetch only relevant bookings (same date and technician)
+    const bookingsCollection = await getCollection("bookings");
+    const existingBookings = await bookingsCollection
+      .find({ date, technician })
+      .toArray();
+
+    //Exclude the booking being rescheduled
+    const filteredBookings = existingBookings.filter(
+      (booking) => booking.id !== bookingIdToIgnore
+    );
 
     // Check for overlaps
     const hasOverlap = existingBookings.some((booking) => {
-      if (booking.date !== date || booking.technician !== technician) {
-        return false; // Only check bookings for the same day and same technician
-      }
-
       const existingStartTime = parseDateTime(booking.date, booking.time);
       const existingEndTime = new Date(
         existingStartTime.getTime() + booking.duration * 60000
@@ -73,7 +72,7 @@ export const checkBookingOverlap = async (
       );
     });
 
-    return hasOverlap || false; // ✅ Return true if overlap, false if available
+    return hasOverlap || false; // Return true if overlap, false if available
   } catch (error) {
     console.error("Error in checkBookingOverlap:", error.message);
     throw new Error("Failed to check booking overlaps");

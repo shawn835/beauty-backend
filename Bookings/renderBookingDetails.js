@@ -1,4 +1,4 @@
-import { readBookings } from "./bookingsFormHandler.js";
+import { getCollection } from "../utility/readDB.js";
 import "dotenv/config";
 import { sanitizeInput } from "../utility/sanitization.js";
 import { parseRequestBody } from "../utility/MiddleWare.js";
@@ -25,7 +25,8 @@ export const adminAuth = async (req, res) => {
 
 export const renderBookings = async (req, res) => {
   try {
-    const bookings = await readBookings();
+    const bookingsCollection = await getCollection("bookings");
+    const bookings = await bookingsCollection.find().toArray();
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(bookings));

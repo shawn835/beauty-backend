@@ -1,14 +1,12 @@
-import { writeBookings } from "./bookingsFormHandler.js";
+import { getCollection } from "../utility/readDB.js";
 import { generateBookingId } from "../generateId.js";
 import { checkBookingOverlap } from "./checkingOverlap.js";
 import { validateAndSanitizeBookingData } from "./bookingFormValidation.js";
-import path from "path";
-import { fileURLToPath } from "url";
 import fs from "fs";
+import { fileURLToPath } from "url";
+import path from "path";
 const __filename = fileURLToPath(import.meta.url);
-
 const __dirname = path.dirname(__filename);
-
 const rateLimitFile = path.resolve(__dirname, process.env.RATE_LIMIT_PATH);
 
 const RATE_LIMIT_TIME = 60000;
@@ -28,6 +26,8 @@ const saveRateLimitData = () => {
 
 export const handleBookingsPosts = async (req, res) => {
   try {
+    const bookingsCollection = await getCollection("bookings");
+
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     const now = Date.now();
 
@@ -86,7 +86,7 @@ export const handleBookingsPosts = async (req, res) => {
           error:
             hasOverlap === true
               ? `Pick another time or technician, ${sanitizedData.technician} is booked at this time`
-              : hasOverlap, // The time restriction message
+              : hasOverlap,
         })
       );
     }
@@ -101,11 +101,10 @@ export const handleBookingsPosts = async (req, res) => {
       services: servicesArray,
       technician: sanitizedData.technician,
       duration: sanitizedData.duration,
-      imagePaths: finalImagePaths, // ✅ Only URLs now
+      imagePaths: finalImagePaths,
     };
 
-    // Store the booking
-    await writeBookings(newBooking);
+    await bookingsCollection.insertOne(newBooking);
 
     //Only add to rate limit if booking was successful
     submissionRecords[ip].push(now);
@@ -122,7 +121,7 @@ export const handleBookingsPosts = async (req, res) => {
   }
 };
 
-// ✅ Helper function to get request body
+//function to get request body
 const getRequestBody = (req) =>
   new Promise((resolve, reject) => {
     let body = "";
