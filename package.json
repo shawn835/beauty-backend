@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "beauty server side",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --env-file=.env index.js"
+  },
+  "author": "shawn",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "formidable": "^3.5.2",
+    "glob": "^11.0.1",
+    "mongodb": "^6.14.2",
+    "puppeteer": "^24.2.1",
+    "sharp": "^0.33.5",
+    "slugify": "^1.6.6"
+  }
+}
