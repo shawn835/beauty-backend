@@ -39,6 +39,8 @@ const displayImagesDir = path.resolve(
   process.env.DISPLAY_IMAGES_PATH
 );
 
+const cardImagePath = path.resolve(__dirname, "public/images");
+
 // Main server logic
 const server = http.createServer(async (req, res) => {
   handleCORS(req, res);
@@ -74,6 +76,8 @@ const server = http.createServer(async (req, res) => {
       await serveStaticFiles(req, res, postsImagesDir);
     } else if (req.url.startsWith("/displayImage")) {
       await serveStaticFiles(req, res, displayImagesDir);
+    } else if (req.url.startsWith("/images")) {
+      await serveStaticFiles(req, res, cardImagePath);
     } else if (req.url === "/blogs") {
       await fetchBlogs(req, res);
     } else if (req.url.startsWith("/blogPost")) {

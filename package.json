@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --env-file=.env index.js"
+    "start": "nodemon --env-file=.env index.js",
+    "postinstall": "apt-get update && apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2"
   },
   "author": "shawn",
   "license": "ISC",

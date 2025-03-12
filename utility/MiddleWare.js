@@ -1,6 +1,3 @@
-import exp from "constants";
-import { start } from "repl";
-
 // Middleware to handle CORS
 export const handleCORS = (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from anywhere

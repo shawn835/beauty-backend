@@ -1,10 +1,20 @@
 import puppeteer from "puppeteer";
 
+const BACKEND_URL = process.env.BACKEND_URL;
+const imageUrl = `${BACKEND_URL}/images/card-image-bg.jpg`;
+
 export const generateBookingPDF = async (bookingDetails) => {
-  const browser = await puppeteer.launch({ headless: "new" });
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-gpu",
+      "--disable-dev-shm-usage",
+    ],
+  });
   const page = await browser.newPage();
 
-  // ✅ Move function to the top before it's used in the template
   const formatDuration = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -88,7 +98,7 @@ img {
   <body>
       <div class="card-info">
         <div class="image">
-       <img src="http://localhost:3000/hero-images/about-hero-image.jpg" alt="Salon Image" />
+       <img src="${imageUrl}" alt="Salon Image" />
         </div>
         <div class="booking-details">
           <div class="confirm-text-id">
