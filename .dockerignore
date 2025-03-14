@@ -1,0 +1,28 @@
+# Ignore node modules and dependency files  
+node_modules  
+npm-debug.log  
+package-lock.json  
+pnpm-lock.yaml  
+yarn.lock  
+
+# Ignore environment variables  
+.env  
+.env.local  
+.env.*  
+
+# Ignore logs  
+logs  
+*.log  
+
+# Ignore local IDE/editor config files  
+.vscode  
+.idea  
+*.iml  
+
+# Ignore system files  
+.DS_Store  
+Thumbs.db  
+
+# Ignore build artifacts  
+dist  
+build  
