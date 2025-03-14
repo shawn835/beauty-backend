@@ -46,16 +46,11 @@ export const checkBookingOverlap = async (
       return "Services are offered from 6:00 AM to 9:00 PM";
     }
 
-    // ✅ Fetch only relevant bookings (same date and technician)
+    //Fetch only relevant bookings (same date and technician)
     const bookingsCollection = await getCollection("bookings");
     const existingBookings = await bookingsCollection
       .find({ date, technician })
       .toArray();
-
-    //Exclude the booking being rescheduled
-    const filteredBookings = existingBookings.filter(
-      (booking) => booking.id !== bookingIdToIgnore
-    );
 
     // Check for overlaps
     const hasOverlap = existingBookings.some((booking) => {

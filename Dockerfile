@@ -1,11 +1,12 @@
 # Use official Node.js LTS slim image
-FROM node:18-slim
+FROM node:20-slim
 
 # Set working directory inside container
 WORKDIR /app
 
-# Install required dependencies for Puppeteer
+# Install required dependencies for Puppeteer & Chromium
 RUN apt-get update && apt-get install -y \
+    chromium \
     libnss3 \
     libatk-bridge2.0-0 \
     libcups2 \
@@ -34,11 +35,10 @@ RUN npm install --omit=dev
 COPY . .
 
 # Set Puppeteer environment variables
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Expose the backend port (default: 3000)
+# Expose the backend port (default: 8000)
 EXPOSE 8000
 
 # Start the backend
-CMD ["node", "index.js"] 
+CMD ["node", "index.js"]
