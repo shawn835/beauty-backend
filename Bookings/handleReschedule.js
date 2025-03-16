@@ -2,6 +2,7 @@ import { getCollection } from "../utility/readDB.js";
 import { rescheduleOverlap } from "./rescheduleCheckBookingOverlap.js";
 import { validateAndSanitizeRescheduleData } from "./bookingFormValidation.js";
 import { parseRequestBody } from "../utility/MiddleWare.js";
+import { isBookingExpired } from "../utility/checkBookingExpiry.js";
 
 export const handleBookingReschedule = async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -31,6 +32,13 @@ export const handleBookingReschedule = async (req, res) => {
     if (!booking) {
       res.writeHead(404, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: "Booking not found" }));
+    }
+
+    if (isBookingExpired(booking)) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      return res.end(
+        JSON.stringify({ error: "cannot reschedule past bookings" })
+      );
     }
 
     const {

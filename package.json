@@ -17,6 +17,7 @@
     "formidable": "^3.5.2",
     "glob": "^11.0.1",
     "mongodb": "^6.14.2",
+    "node-cron": "^3.0.3",
     "puppeteer": "^24.2.1",
     "sharp": "^0.33.5",
     "slugify": "^1.6.6"

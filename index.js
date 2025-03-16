@@ -17,9 +17,9 @@ import { adminAuth } from "./Bookings/renderBookingDetails.js";
 import { renderBookings } from "./Bookings/renderBookingDetails.js";
 import { convertFiles } from "./Bookings/fileUpload.js";
 import { serveStaticFiles } from "./staticFiles.js";
-import { sendTelegramMessage } from "./Bookings/Telegram.js";
 import { fetchBlogs } from "./Blogs/BlogFetch.js";
 import { getBlogBySlug } from "./Blogs/GetBlogBySlug.js";
+import { sendTelegramMessage } from "./Bookings/Telegram.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

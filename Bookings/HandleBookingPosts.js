@@ -2,6 +2,8 @@ import { getCollection } from "../utility/readDB.js";
 import { generateBookingId } from "../generateId.js";
 import { checkBookingOverlap } from "./checkingOverlap.js";
 import { validateAndSanitizeBookingData } from "./bookingFormValidation.js";
+import { sendTelegramMessage } from "./Telegram.js";
+import { parseRequestBody } from "../utility/MiddleWare.js";
 
 const RATE_LIMIT_TIME = 60000;
 const MAX_BOOKINGS_PER_MINUTE = 2;
@@ -29,9 +31,8 @@ export const handleBookingsPosts = async (req, res) => {
       );
     }
 
-    // Extract request data
-    const body = await getRequestBody(req);
-    const fields = JSON.parse(body);
+    // Use parseRequestBody to parse the request body as JSON
+    const fields = await parseRequestBody(req); // This replaces getRequestBody(req)
     const sanitizedData = validateAndSanitizeBookingData(fields);
 
     const finalImagePaths = [
@@ -71,9 +72,24 @@ export const handleBookingsPosts = async (req, res) => {
       technician: sanitizedData.technician,
       duration: sanitizedData.duration,
       imagePaths: finalImagePaths,
+      status: "active",
+      createdAt: new Date(),
     };
 
     await bookingsCollection.insertOne(newBooking);
+
+    if (newBooking) {
+      const message = `
+      New Booking Received!*
+      👤 Customer:  ${sanitizedData.name}
+      📞 Phone:  ${sanitizedData.phone}
+      💅 Service:  ${sanitizedData.services.join(", ")}
+      ⏰ Date:  ${sanitizedData.date}
+      🕒 Time:  ${sanitizedData.time}
+      💇‍♂️ Technician:  ${sanitizedData.technician}
+              `;
+      await sendTelegramMessage(message);
+    }
 
     // Add new timestamp and update rate limit in MongoDB
     timestamps.push(now);
@@ -93,12 +109,3 @@ export const handleBookingsPosts = async (req, res) => {
     res.end(JSON.stringify({ error: "Internal server error" }));
   }
 };
-
-//function to get request body
-const getRequestBody = (req) =>
-  new Promise((resolve, reject) => {
-    let body = "";
-    req.on("data", (chunk) => (body += chunk.toString()));
-    req.on("end", () => resolve(body));
-    req.on("error", (err) => reject(err));
-  });
