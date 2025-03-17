@@ -32,7 +32,7 @@ export const handleBookingsPosts = async (req, res) => {
     }
 
     // Use parseRequestBody to parse the request body as JSON
-    const fields = await parseRequestBody(req); // This replaces getRequestBody(req)
+    const fields = await parseRequestBody(req);
     const sanitizedData = validateAndSanitizeBookingData(fields);
 
     const finalImagePaths = [
@@ -104,8 +104,8 @@ export const handleBookingsPosts = async (req, res) => {
       JSON.stringify({ success: "Booking received!", booking: newBooking })
     );
   } catch (error) {
-    console.error("Error handling booking:", error.message);
+    console.error(error);
     res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Internal server error" }));
+    res.end(JSON.stringify({ "Error handling booking": error.message }));
   }
 };
