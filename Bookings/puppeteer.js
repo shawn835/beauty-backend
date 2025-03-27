@@ -1,10 +1,20 @@
 import puppeteer from "puppeteer";
+import { fileURLToPath } from "url";
+import fs from "fs";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const OUTPUT_DIR = path.join(__dirname, "prerendered");
+import { readJson } from "../utility/readJson.js";
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const imageUrl = `${BACKEND_URL}/images/card-image-bg.jpg`;
+const BASE_URL = "http://localhost:3000";
+const BLOG_LIST_PAGE = "/blogposts";
 
-export const generateBookingPDF = async (bookingDetails) => {
-  const browser = await puppeteer.launch({
+const launchBrowser = async () => {
+  return await puppeteer.launch({
     headless: "new",
     args: [
       "--no-sandbox",
@@ -13,6 +23,11 @@ export const generateBookingPDF = async (bookingDetails) => {
       "--disable-dev-shm-usage",
     ],
   });
+};
+
+export const generateBookingPDF = async (bookingDetails) => {
+  const browser = await launchBrowser();
+
   const page = await browser.newPage();
 
   const formatDuration = (minutes) => {
@@ -170,4 +185,42 @@ img {
   } finally {
     await browser.close();
   }
+};
+
+const getSlugs = async () => {
+  const blogsPath = path.join(
+    __dirname,
+    "../Blogs",
+    process.env.BLOGS_JSON_PATH
+  );
+  const blogSlug = await readJson(blogsPath);
+  return blogSlug.map((sl) => sl.slug);
+};
+
+export const preRenderBlog = async () => {
+  const BLOG_SLUGS = await getSlugs();
+  const browser = await launchBrowser();
+  const page = await browser.newPage();
+
+  const preRenderPage = async (url, outputPath) => {
+    await page.goto(url, { waitUntil: "networkidle2" });
+    const content = await page.content();
+    fs.writeFileSync(outputPath, content);
+    console.log(`Pre-rendered: ${url} -> ${outputPath}`);
+  };
+
+  if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+  await preRenderPage(
+    `${BASE_URL}${BLOG_LIST_PAGE}`,
+    path.join(OUTPUT_DIR, "blogposts.html")
+  );
+  for (const slug of BLOG_SLUGS) {
+    await preRenderPage(
+      `${BASE_URL}/blogPosts/${slug}`,
+      path.join(OUTPUT_DIR, `${slug}.html`)
+    );
+  }
+
+  await browser.close();
+  console.log("Pre-rendering complete.");
 };

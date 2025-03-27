@@ -16,10 +16,15 @@ import { handleCancelBooking } from "./Bookings/handleCancelBooking.js";
 import { adminAuth } from "./Bookings/renderBookingDetails.js";
 import { renderBookings } from "./Bookings/renderBookingDetails.js";
 import { convertFiles } from "./Bookings/fileUpload.js";
-import { serveStaticFiles } from "./staticFiles.js";
+import { serveStaticOrPreRendered } from "./staticFiles.js";
 import { fetchBlogs } from "./Blogs/BlogFetch.js";
 import { getBlogBySlug } from "./Blogs/GetBlogBySlug.js";
-import { sendTelegramMessage } from "./Bookings/Telegram.js";
+import { preRenderBlog } from "./Bookings/puppeteer.js";
+import { url } from "inspector";
+
+(async () => {
+  await preRenderBlog();
+})();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +44,8 @@ const displayImagesDir = path.resolve(
   process.env.DISPLAY_IMAGES_PATH
 );
 
+const prerenderedDir = path.join(__dirname, "/Bookings/prerendered");
+
 const cardImagePath = path.resolve(__dirname, "public/images");
 
 // Main server logic
@@ -46,7 +53,7 @@ const server = http.createServer(async (req, res) => {
   handleCORS(req, res);
 
   if (handlePreflight(req, res)) {
-    return; // Stop further processing if it's a preflight request
+    return;
   }
 
   if (req.method === "POST") {
@@ -71,17 +78,23 @@ const server = http.createServer(async (req, res) => {
     } else if (req.url === "/admin/bookings") {
       renderBookings(req, res);
     } else if (req.url.startsWith("/BookingSamplesImages")) {
-      await serveStaticFiles(req, res, uploadDir);
+      await serveStaticOrPreRendered(req, res, uploadDir);
     } else if (req.url.startsWith("/postsImages")) {
-      await serveStaticFiles(req, res, postsImagesDir);
+      await serveStaticOrPreRendered(req, res, postsImagesDir);
     } else if (req.url.startsWith("/displayImage")) {
-      await serveStaticFiles(req, res, displayImagesDir);
+      await serveStaticOrPreRendered(req, res, displayImagesDir);
     } else if (req.url.startsWith("/images")) {
-      await serveStaticFiles(req, res, cardImagePath);
-    } else if (req.url === "/blogs") {
+      await serveStaticOrPreRendered(req, res, cardImagePath);
+    } else if (req.url.startsWith("/api/blogs")) {
       await fetchBlogs(req, res);
-    } else if (req.url.startsWith("/blogPost")) {
+    } else if (req.url.startsWith("/api/blogpost")) {
       await getBlogBySlug(req, res);
+    } else if (req.url === "/blogposts") {
+      await serveStaticOrPreRendered(req, res, prerenderedDir);
+    } else if (req.url.startsWith("/blogposts")) {
+      const slug = req.url.split("/").pop();
+      const filePath = path.join(prerenderedDir, `${slug}.html`);
+      await serveStaticOrPreRendered(req, res, prerenderedDir);
     } else {
       handleRouteNotFound(req, res);
     }

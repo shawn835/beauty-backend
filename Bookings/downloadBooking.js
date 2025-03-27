@@ -1,4 +1,4 @@
-import { generateBookingPDF } from "./generatePdf.js";
+import { generateBookingPDF } from "./puppeteer.js";
 import url from "url";
 
 export const downloadBookings = async (req, res) => {

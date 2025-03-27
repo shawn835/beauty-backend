@@ -29,10 +29,10 @@ export const convertFiles = async (req, res) => {
     }
 
     const uploadedFile = files.file[0]; // Ensure file exists
-    if (!uploadedFile) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ error: "No file uploaded" }));
-    }
+    // if (!uploadedFile) {
+    //   res.writeHead(400, { "Content-Type": "application/json" });
+    //   return res.end(JSON.stringify({ error: "No file uploaded" }));
+    // }
 
     // Validate MIME type
     if (!allowedMimeTypes.includes(uploadedFile.mimetype)) {
@@ -50,7 +50,6 @@ export const convertFiles = async (req, res) => {
       return res.end(JSON.stringify({ error: "File size exceeds 5MB limit." }));
     }
 
-    //validate number
     const newPath = path.join(uploadDir, uploadedFile.originalFilename);
     await fs.rename(uploadedFile.filepath, newPath);
 
