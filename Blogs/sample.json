@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "How to Maintain a Perfect Manicure",
+    "slug": "maintaining-perfect-manicure",
+    "imageDisplay": "/displayImages/art-image-9.jpg",
+    "category": "Nails",
+    "subCategory": "Manicure",
+    "author": "Jane Doe",
+    "publishedDate": "2025-03-04",
+    "updatedDate": "2025-03-06",
+    "tags": ["nail care", "manicure", "beauty tips"],
+    "excerpt": "Discover easy tips to keep your manicure looking fresh and stylish for weeks.",
+    "content": "## How to Maintain a Perfect Manicure\n\nTaking care of your nails is essential for a lasting manicure.\n\n![Nail care](/postsImages/manicure-image-4.jpg)\n\n### Tips for a Long-Lasting Manicure\n- Keep your hands moisturized\n- Use a base coat\n- Apply thin layers of polish\n\n### Step-by-Step Guide\n1. Clean your nails thoroughly\n2. Apply a base coat\n3. Paint thin layers of polish\n4. Seal with a top coat\n\n> A well-maintained manicure boosts confidence!",
+    "meta": {
+      "title": "How to Maintain a Perfect Manicure - Beauty Blog",
+      "description": "Learn the best tips and tricks to make your manicure last longer and look stunning.",
+      "keywords": ["nail care", "manicure tips", "long-lasting nails"],
+      "ogImage": "/displayImages/art-image-9.jpg"
+    }
+  }
+]

@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { handleCORS } from "./utility/MiddleWare.js";
 import { handlePreflight } from "./utility/MiddleWare.js";
-import { uptimeReboot } from "./utility/MiddleWare.js";
 import { handleRouteNotFound } from "./utility/HandleRouteNotFound.js";
 import { handleMethodNotAllowed } from "./utility/HandleMethodNotAllowed.js";
 import { handleBookingsPosts } from "./Bookings/HandleBookingPosts.js";
@@ -20,7 +19,7 @@ import { serveStaticOrPreRendered } from "./staticFiles.js";
 import { fetchBlogs } from "./Blogs/BlogFetch.js";
 import { getBlogBySlug } from "./Blogs/GetBlogBySlug.js";
 import { preRenderBlog } from "./Bookings/puppeteer.js";
-import { url } from "inspector";
+import { handleBlogPosts } from "./Blogs/handleBlogPost.js";
 
 (async () => {
   await preRenderBlog();
@@ -65,14 +64,14 @@ const server = http.createServer(async (req, res) => {
       await adminAuth(req, res);
     } else if (req.url === "/upload") {
       await convertFiles(req, res);
+    } else if (req.url === "/api/admin/post-blog") {
+      await handleBlogPosts(req, res);
     } else {
       handleRouteNotFound(req, res);
     }
   } else if (req.method === "GET") {
     if (req.url.startsWith("/booking-details")) {
       await retrieveBookingDetails(req, res);
-    } else if (req.url.startsWith("/ping")) {
-      uptimeReboot(req, res);
     } else if (req.url.startsWith("/download-booking")) {
       await downloadBookings(req, res);
     } else if (req.url === "/admin/bookings") {
@@ -92,8 +91,6 @@ const server = http.createServer(async (req, res) => {
     } else if (req.url === "/blogposts") {
       await serveStaticOrPreRendered(req, res, prerenderedDir);
     } else if (req.url.startsWith("/blogposts")) {
-      const slug = req.url.split("/").pop();
-      const filePath = path.join(prerenderedDir, `${slug}.html`);
       await serveStaticOrPreRendered(req, res, prerenderedDir);
     } else {
       handleRouteNotFound(req, res);

@@ -1,4 +1,5 @@
 // Middleware to handle CORS
+import fs from "fs/promises";
 export const handleCORS = (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from anywhere
   res.setHeader(
@@ -37,10 +38,13 @@ export const parseRequestBody = (req) => {
   });
 };
 
-//uptime reboot
-export const uptimeReboot = (req, res) => {
-  res.writeHead(200, { "Content-Type": "application/json" });
-  return res.end(JSON.stringify({ status: "ok" }));
+// Ensure the upload directory exists
+export const ensureDirExists = async (dir) => {
+  try {
+    await fs.access(dir);
+  } catch {
+    await fs.mkdir(dir, { recursive: true });
+  }
 };
 
 //within hours check

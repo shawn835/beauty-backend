@@ -10,7 +10,7 @@ import { readJson } from "../utility/readJson.js";
 
 const BACKEND_URL = process.env.BACKEND_URL;
 const imageUrl = `${BACKEND_URL}/images/card-image-bg.jpg`;
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.FRONTEND_URL;
 const BLOG_LIST_PAGE = "/blogposts";
 
 const launchBrowser = async () => {
@@ -206,7 +206,7 @@ export const preRenderBlog = async () => {
     await page.goto(url, { waitUntil: "networkidle2" });
     const content = await page.content();
     fs.writeFileSync(outputPath, content);
-    console.log(`Pre-rendered: ${url} -> ${outputPath}`);
+    // console.log(`Pre-rendered: ${url} -> ${outputPath}`);
   };
 
   if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -216,11 +216,11 @@ export const preRenderBlog = async () => {
   );
   for (const slug of BLOG_SLUGS) {
     await preRenderPage(
-      `${BASE_URL}/blogPosts/${slug}`,
+      `${BASE_URL}/blogposts/${slug}`,
       path.join(OUTPUT_DIR, `${slug}.html`)
     );
   }
 
   await browser.close();
-  console.log("Pre-rendering complete.");
+  // console.log("Pre-rendering complete.");
 };

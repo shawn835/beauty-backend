@@ -2,20 +2,13 @@ import fs from "fs/promises";
 import formidable from "formidable";
 import path from "path";
 import { fileURLToPath } from "url";
+import { ensureDirExists } from "../utility/MiddleWare.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadDir = path.resolve(__dirname, process.env.SAMPLE_IMAGES_PATH);
 const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
-const ensureDirExists = async (dir) => {
-  try {
-    await fs.access(dir);
-  } catch {
-    await fs.mkdir(dir, { recursive: true });
-  }
-};
 
 export const convertFiles = async (req, res) => {
   await ensureDirExists(uploadDir);
@@ -28,11 +21,7 @@ export const convertFiles = async (req, res) => {
       return res.end(JSON.stringify({ error: "File upload failed" }));
     }
 
-    const uploadedFile = files.file[0]; // Ensure file exists
-    // if (!uploadedFile) {
-    //   res.writeHead(400, { "Content-Type": "application/json" });
-    //   return res.end(JSON.stringify({ error: "No file uploaded" }));
-    // }
+    const uploadedFile = files.file[0];
 
     // Validate MIME type
     if (!allowedMimeTypes.includes(uploadedFile.mimetype)) {
